@@ -1,3 +1,4 @@
 django==4.1
-psycopg2
 requests
+psycopg2
+python-dotenv

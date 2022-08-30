@@ -3,11 +3,12 @@ from django.test import TestCase
 from .models import Post
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
 
 class PostModelTests(TestCase):
   def setUp(self):
     user = User.objects.create_user('johnftitor-tester', 'testing@test.com', 'passwurd')
-    self.post = Post.objects.create(user = user, title = 'my valid title',
+    Post.objects.create(user = user, title = 'my valid title',
     content = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse fermentum rutrum feugiat.
     Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam vitae orci euismod, sagittis elit at,
     porta magna. Donec vel felis placerat, ultricies mauris faucibus, condimentum elit. Proin sit amet elit enim.
@@ -16,8 +17,11 @@ class PostModelTests(TestCase):
     Curabitur vel felis quis massa tincidunt vulputate.""",
     comments_count = 0,
     likes_count = 0,
-    creation_date = timezone.now(),
+    create_date = timezone.now(),
     update_date = timezone.now())
 
-  def test(self):
-    print(self.post)
+  def test_user_exists(self):
+    post = Post.objects.get(id= 1)
+    post.user = None
+    with self.assertRaises(IntegrityError):
+      post.save()

@@ -5,7 +5,7 @@ from django.core.validators import MinLengthValidator
 class Post(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   title = models.CharField(max_length=40, validators = [MinLengthValidator(limit_value= 5)])  
-  content = models.TextField()
+  content = models.TextField(validators = [MinLengthValidator(limit_value= 200)])
   comments_count = models.IntegerField()
   likes_count = models.IntegerField()
   create_date = models.DateField()

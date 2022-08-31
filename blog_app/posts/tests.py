@@ -8,8 +8,8 @@ from django.db.utils import IntegrityError, DataError
 
 class PostModelTests(TestCase):
   def setUp(self):
-    user = User.objects.create_user('johnftitor-tester', 'testing@test.com', 'passwurd')
-    Post.objects.create(user = user, title = 'my valid title',
+    self.user = User.objects.create_user('johnftitor-tester', 'testing@test.com', 'passwurd')
+    Post.objects.create(user = self.user, title = 'my valid title',
     content = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse fermentum rutrum feugiat.
     Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam vitae orci euismod, sagittis elit at,
     porta magna. Donec vel felis placerat, ultricies mauris faucibus, condimentum elit. Proin sit amet elit enim.
@@ -68,3 +68,31 @@ class PostModelTests(TestCase):
     post.content = 'c'*198
     with self.assertRaises(ValidationError):
       post.full_clean()
+
+  def test_comments_count_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.comments_count = None
+    with self.assertRaises(IntegrityError):
+      post.save()
+  
+  def test_comments_count_defaults_to_zero(self):
+    post = Post.objects.create(user = self.user, title = 'my valid title',
+    content = "c"*200,
+    likes_count = 0,
+    create_date = timezone.now(),
+    update_date = timezone.now())
+    self.assertEquals(post.comments_count, 0)
+
+  def test_likes_count_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.likes_count = None
+    with self.assertRaises(IntegrityError):
+      post.save()
+  
+  def test_likes_count_defaults_to_zero(self):
+    post = Post.objects.create(user = self.user, title = 'my valid title',
+    content = "c"*200,
+    comments_count = 0,
+    create_date = timezone.now(),
+    update_date = timezone.now())
+    self.assertEquals(post.likes_count, 0)

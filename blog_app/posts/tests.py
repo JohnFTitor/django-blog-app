@@ -50,3 +50,21 @@ class PostModelTests(TestCase):
     post.title = 'c ' * 21
     with self.assertRaises(DataError):
       post.save()
+
+  def test_content_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.content = None
+    with self.assertRaises(IntegrityError):
+      post.save()
+
+  def test_content_is_not_empty(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.content = ''
+    with self.assertRaises(ValidationError):
+      post.full_clean()
+
+  def test_content_is_not_less_than_200_characters(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.content = 'c'*198
+    with self.assertRaises(ValidationError):
+      post.full_clean()

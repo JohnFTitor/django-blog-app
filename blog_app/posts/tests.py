@@ -1,9 +1,10 @@
 from time import time
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from .models import Post
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.db.utils import IntegrityError
+from django.db.utils import IntegrityError, DataError
 
 class PostModelTests(TestCase):
   def setUp(self):
@@ -21,7 +22,31 @@ class PostModelTests(TestCase):
     update_date = timezone.now())
 
   def test_user_exists(self):
-    post = Post.objects.get(id= 1)
+    post = Post.objects.get(title = 'my valid title')
     post.user = None
     with self.assertRaises(IntegrityError):
+      post.save()
+
+  def test_title_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.title = None
+    with self.assertRaises(IntegrityError):
+      post.save()
+
+  def test_title_is_not_empty(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.title = ''
+    with self.assertRaises(ValidationError):
+      post.full_clean()
+
+  def test_title_is_not_less_than_5_characters(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.title = 'four'
+    with self.assertRaises(ValidationError):
+      post.full_clean()
+
+  def test_title_is_not_greater_than_40_characters(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.title = 'c ' * 21
+    with self.assertRaises(DataError):
       post.save()

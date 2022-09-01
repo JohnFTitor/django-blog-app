@@ -96,3 +96,15 @@ class PostModelTests(TestCase):
     create_date = timezone.now(),
     update_date = timezone.now())
     self.assertEquals(post.likes_count, 0)
+
+  def test_create_date_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.create_date = None
+    with self.assertRaises(IntegrityError):
+      post.save()
+
+  def test_update_date_exists(self):
+    post = Post.objects.get(title = 'my valid title')
+    post.update_date = None
+    with self.assertRaises(IntegrityError):
+      post.save()

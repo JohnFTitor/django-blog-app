@@ -10,3 +10,6 @@ class Post(models.Model):
   likes_count = models.IntegerField(default= 0)
   create_date = models.DateField()
   update_date = models.DateField()
+
+  def __str__(self):
+    return f"{self.title} by {self.user.username}"

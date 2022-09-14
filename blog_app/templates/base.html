@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block styles %}{% endblock styles %}  
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+
+<body>
+    <div id="navbar">
+        {% block navbar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <main id="content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

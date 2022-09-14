@@ -1,1 +1,28 @@
-<h1> Welcome </h1>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'posts/styles.css' %}" >  
+{% endblock styles %}
+   
+{% block content %}
+<h1> Welcome, user </h1>
+<ul class="entries">
+  {% for entry in data %}
+    <li class="entry">
+      <div class="primary-content"> 
+        <h3>{{entry.title}}</h3>
+        <p>{{entry.content}}</p>
+      </div>
+      <div class="info">
+        <p> {{entry.user.username}} </p>
+        <p> {{entry.comments_count}} </p>
+        <p> {{entry.likes_count}} </p>
+        <p> {{entry.update_date}} </p>
+      </div>
+    </li>
+  {% endfor %}  
+</ul>
+{% endblock content %}
+  

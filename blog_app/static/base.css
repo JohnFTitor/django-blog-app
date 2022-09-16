@@ -1,3 +1,24 @@
+li {
+  list-style-type: none;
+}
+
+#navbar {
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 30px;
+  border-bottom: 1px solid black;
+}
+
+#navbar p {
+  font-size: 30px;
+}
+
 #navbar a {
-  font-size: 60px;
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
 }
